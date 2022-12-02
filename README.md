@@ -2,6 +2,13 @@ A command line tool for following US Senators trades using Alpaca written in rus
 
 ## Installation
 Clone this repository to your local machine.
+
+## How does it work 
+This program queries the data form [Senate stock watcher](https://senatestockwatcher.com/) and [House stock watcher](https://housestockwatcher.com/) respectively. Using this data, it tries to place orders mimicing the trades placed by senate members/house members respectively. 
+
+It buys according to how the chamber members bought stock.
+
+It sells according to how the chamber members sold stock (if there is something to sell).
 ## Usage 
 
 ### 1. Declare your alpaca API keys
