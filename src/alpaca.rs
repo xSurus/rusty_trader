@@ -91,6 +91,7 @@ async fn get_trades_house (trades: reqwest::Response) -> Result<Vec<Order>, Erro
             let current_transaction = transaction.as_object().unwrap();
             let description = current_transaction.get("description").unwrap().as_str().unwrap();
             let tick = current_transaction.get("ticker").unwrap().as_str().unwrap();
+            println!("{}: {}", tick, current_transaction.get("amount").unwrap());
             let amount = extract_amount(current_transaction.get("amount").unwrap().as_str().unwrap()).unwrap();
             if description.contains("Bond") || description.contains("Option") || description.contains("Note") || tick == "--" {
                 continue;
@@ -258,7 +259,7 @@ fn extract_amount(input: &str) -> Option<i64> {
     // regex expression to extract amount given by $250,001 - $500,000 and then average it
     lazy_static! {
         static ref RE: Regex = Regex::new(
-            r"\$(\d+,\d+) - \$(\d+,\d+)"
+            r"\$([\d+,]+) - \$([\d+,]+)"
         ).unwrap();
     }
     let min = RE.captures(input).and_then(|cap| cap.get(1)).map(|m| m.as_str())?;
