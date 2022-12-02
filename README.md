@@ -7,9 +7,11 @@ Clone this repository to your local machine.
 ### 1. Declare your alpaca API keys
 Declare your API keys as follows:
 
-> *export APCA_API_KEY_ID=YOUR_KEY_ID
-export APCA_API_SECRET_KEY=YOUR_SECRET_KEY
-export APCA_API_BASE_URL=https://api.alpaca.markets*
+> *export APCA_API_KEY_ID=YOUR_KEY_ID*
+
+> *export APCA_API_SECRET_KEY=YOUR_SECRET_KEY*
+
+> *export APCA_API_BASE_URL=https://api.alpaca.markets*
 
 For instructions on how to find these keys, refer to [this guide](https://alpaca.markets/learn/connect-to-alpaca-api/).
 
@@ -24,14 +26,17 @@ Replicate US house member's trades:
 
 Show the performance of your portfolio:
     
-    rusty_trader -f alpaca_portfolio
+    rusty_trader -f alpaca_positions
 
 
 If you need help, try `rusty_trader -h` for usage information.
 
 ## Automation
 To automatically replicate the trades placed by US senators, you might create a crontab that looks something like the following:
-> *APCA_API_KEY_ID=YOUR_KEY_ID
-APCA_API_SECRET_KEY=YOUR_SECRET_KEY
-APCA_API_BASE_URL=https://api.alpaca.markets
-0 19 * * * ./Documents/CodingProjects/rust_trader/trader/target/debug/trader -f order -c house*
+> *APCA_API_KEY_ID=YOUR_KEY_ID*
+
+> *APCA_API_SECRET_KEY=YOUR_SECRET_KEY*
+
+> *APCA_API_BASE_URL=https://api.alpaca.markets*
+
+> *0 19 * * * ./Documents/CodingProjects/rust_trader/trader/target/debug/trader -f order -c house*
