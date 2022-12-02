@@ -1,0 +1,18 @@
+[package]
+name = "rusty_trader"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+apca = "0.25.1"
+tokio = {version = "1.0", default-features = false, features = ["full"]}
+chrono = {version = "0.4.19", features = ["serde"]}
+num-decimal = {version = "0.2.4", default-features = false, features = ["num-v04", "serde"]}
+reqwest = {version = "0.11.4", default-features = false, features = ["json", "stream"]}
+serde = { version = "1.0.104", features = ["derive"] }
+serde_json = "1.0.48"
+lazy_static = "1.4.0"
+regex = "1.4.2"
+clap = { version = "4.0", features = ["derive"] }
