@@ -73,6 +73,7 @@ async fn get_trades(chamber : &str) -> Result<reqwest::Response, reqwest::Error>
     // get date in US format from 4 days ago, as trades take some time to be transcribed
     let now = chrono::offset::Local::now()- chrono::Duration::days(4);
     let mut date = now.format("%m-%d-%Y").to_string();
+    println!("Requesting trades for {}", date);
     date = date.replace("-", "_");
     // date = "11_21_2022".to_string();
     // request senate trades for date
@@ -133,7 +134,6 @@ async fn place_orders(orders: Vec<Order>, client: Client) -> () {
     // sum over the amount of the orders if the order is a buy
     let sum = orders.iter().fold(0, |acc, order| {
         if order.o_type == "Purchase" || order.o_type == "purchase" {
-            println!("Order: {:#?}", order);
             return acc + order.amount;
         }
         return acc;
@@ -224,7 +224,7 @@ async fn get_current_ticker_value(client: &Client, ticker: &str) -> Result<i64, 
     let last_value = bars::BarsReq {
         symbol: ticker.to_string(),
         limit: Some(1),
-        start: utc_now - chrono::Duration::days(1),
+        start: utc_now - chrono::Duration::days(4),
         end: utc_now,
         timeframe: bars::TimeFrame::OneDay,
         adjustment: Default::default(),

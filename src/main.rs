@@ -30,7 +30,8 @@ async fn main() {
     // set up connection to alpaca API
     let args = Cli::parse();
 
-    let client = Client::new(ApiInfo::from_env().unwrap());
+    let api_info = ApiInfo::from_env().unwrap();
+    let client = Client::new(api_info);
     let account = client.issue::<account::Get>(&()).await.unwrap();
     match args.func.as_str() {
         "account" => {
