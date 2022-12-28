@@ -20,7 +20,7 @@ struct Cli {
     func: String,
 
     /// Who's investments you want to track
-    /// [house, senate]
+    /// [house, senate, both]
     #[arg(short, long, default_value = "senate")]
     chamber: String,
 }

@@ -23,26 +23,50 @@ struct Order {
 }
 
 pub async fn check_trade(client : Client, chamber : &str) -> (){
-    let trades = get_trades(chamber).await.unwrap();
-    if  trades.status() == 200 {
-        let orders: Vec<Order> = match chamber {
-            "house" => {
+    let orders: Vec<Order> = match chamber {
+        "house" => {
+            let trades = get_trades(chamber).await.unwrap();
+            if  trades.status() == 200 {
                 get_trades_house(trades).await.unwrap()
-            }
-            "senate" => {
-                get_trades_senate(trades).await.unwrap()
-            }
-            _ => {
-                eprintln!("Invalid chamber");
+            } else {
+                println!("Request failed: no transactions reported today");
                 exit(1);
             }
-        };
-        place_orders(orders, client).await;
-    } else {
-        // exit program
-        println!("Request failed: no transactions reported today");
-        exit(1);
-    }
+        }
+        "senate" => {
+            let trades = get_trades(chamber).await.unwrap();
+            if  trades.status() == 200 {
+                get_trades_senate(trades).await.unwrap()
+            } else {
+                println!("Request failed: no transactions reported today");
+                exit(1);
+            }
+        }
+        "both" => {
+            let house_trades = get_trades("house").await.unwrap();
+            let senate_trades = get_trades("senate").await.unwrap();
+            if (house_trades.status() == 200) && (senate_trades.status() == 200) {
+                let mut orders = get_trades_house(house_trades).await.unwrap();
+                orders.append(&mut get_trades_senate(senate_trades).await.unwrap());
+                orders
+            }
+            else if  house_trades.status() == 200 {
+                get_trades_house(house_trades).await.unwrap()
+            }
+            else if senate_trades.status() == 200 {
+                get_trades_senate(senate_trades).await.unwrap() 
+            }
+            else {
+                println!("Request failed: no transactions reported today");
+                exit(1);
+            }
+        }
+        _ => {
+            eprintln!("Invalid chamber");
+            exit(1);
+        }
+    };
+    place_orders(orders, client).await;
 }
 
 pub async fn print_positions(client: Client, cash: Num) -> () {
@@ -161,6 +185,7 @@ async fn place_orders(orders: Vec<Order>, client: Client) -> () {
             }.init(order.ticker, order::Side::Buy, order::Amount::quantity(quantity));
         } else if order.o_type == "Sale (Full)"  || order.o_type == "sale_full" {
             // make new num
+            
             let mut currently_held = 0;
             for pos in get_positions(&client).await.unwrap() {
                 if pos.symbol == order.ticker {
@@ -202,7 +227,8 @@ async fn place_orders(orders: Vec<Order>, client: Client) -> () {
             Err(e) => {
                 // to be fixed, good errors!
                 let error = e;
-                println!("Request failed: {:#?}", error);
+                let good_error = error.to_string();
+                println!("Request failed: {:#?}", good_error);
 
                 continue;
             }
